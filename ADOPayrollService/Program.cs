@@ -32,6 +32,11 @@ namespace ADOPayrollService
                     EmployeeRepository repository1 = new EmployeeRepository();
                     repository1.RetrieveDataBasedOnDateRange();
                     break;
+
+                case 4:
+                    EmployeeRepository repository2 = new EmployeeRepository();
+                    repository2.PerformAggregateFunctions("F");
+                    break;
             }
         }
     }

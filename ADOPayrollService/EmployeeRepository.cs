@@ -173,5 +173,50 @@ namespace ADOPayrollService
             Console.WriteLine("\n");
 
         }
+
+        /// <summary>
+        /// UC6-Performing aggregate functions
+        /// </summary>
+        /// <param name="Gender"></param>
+        /// <returns></returns>
+        public string PerformAggregateFunctions(string Gender)
+        {
+            string result = null;
+            try
+            {
+                string query = @"select sum(Basic Pay) as TotalSalary,min(Basic Pay) as MinSalary,max(Basic Pay) as MaxSalary,Round(avg(Basic Pay),0) as AvgSalary,Gender,Count(*) from employee_payroll where Gender =" + "'" + Gender + "'" + " group by Gender";
+                SqlCommand sqlCommand = new SqlCommand(query, this.sqlconnection);
+                sqlconnection.Open();
+                SqlDataReader reader = sqlCommand.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        Console.WriteLine("Total Salary {0}", reader[0]);
+                        Console.WriteLine("Min Salary {0}", reader[1]);
+                        Console.WriteLine("Max Salary {0}", reader[2]);
+                        Console.WriteLine("Average Salary {0}", reader[3]);
+                        Console.WriteLine("Grouped By Gender {0}", reader[4]);
+                        Console.WriteLine("No of employess {0}", reader[5]);
+                        result += reader[4] + " " + reader[0] + " " + reader[1] + " " + reader[2] + " " + reader[3] + " " + reader[5];
+                    }
+                }
+                else
+                {
+                    result = "empty";
+                }
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                this.sqlconnection.Close();
+            }
+            return result;
+        }
     }
 }

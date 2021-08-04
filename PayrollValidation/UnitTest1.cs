@@ -38,5 +38,27 @@ namespace PayrollValidation
             var actual = employeeRepository.RetrieveDataBasedOnDateRange();
             Assert.AreEqual(actual, expected);
         }
+
+        /// <summary>
+        /// UC6-Aggregate Functions
+        /// </summary>
+        [TestMethod]
+        [TestCategory("Using SQL Query for Male")]
+        public void TestMethodForAggregateFunction_GroupByFemale()
+        {
+            string expected = "M 240000 55000 70000 60000 4";
+            string Gender = "M";
+            string actual = employeeRepository.PerformAggregateFunctions(Gender);
+            Assert.AreEqual(actual, expected);
+        }
+        [TestMethod]
+        [TestCategory("Using SQL Query for Female")]
+        public void TestMethodForAggregateFunction_GroupByMale()
+        {
+            string expected = "F 30050000 50000 30000000 15025000 2";
+            string Gender = "F";
+            string actual = employeeRepository.PerformAggregateFunctions(Gender);
+            Assert.AreEqual(actual, expected);
+        }
     }
 }
