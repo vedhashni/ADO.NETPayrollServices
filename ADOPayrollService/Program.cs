@@ -11,6 +11,11 @@ namespace ADOPayrollService
         static void Main(string[] args)
         {
             Console.WriteLine("welcome to payroll service");
+
+            //Creating a object for employeerepository
+            EmployeeRepository repository = new EmployeeRepository();
+            //Calling the method
+            repository.GetAllEmployee();
         }
     }
 }
