@@ -100,5 +100,78 @@ namespace ADOPayrollService
             }
 
         }
+
+        /// <summary>
+        /// UC5-Retrieve employee details based on date range
+        /// </summary>
+        /// <returns></returns>
+        public int RetrieveDataBasedOnDateRange()
+        {
+            //string nameList = null;
+            int count = 0;
+            try
+            {
+                using (sqlconnection)
+                {
+                    //query execution
+                    string query = @"select * from employee_payroll where startDate between('2021-05-01') and getdate()";
+                    //passing the query and connection
+                    SqlCommand command = new SqlCommand(query, this.sqlconnection);
+                    //open sql connection
+                    sqlconnection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            //Display the details 
+                            DisplayEmployeeDetails(reader);
+
+                            //nameList += reader["name"].ToString() + " ";
+                            count++;
+                        }
+                    }
+                    //close reader
+                    reader.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                sqlconnection.Close();
+            }
+            return count;
+
+        }
+        /// <summary>
+        ///DisplayEmployeeDetails method 
+        /// </summary>
+        /// <param name="reader"></param>
+        public void DisplayEmployeeDetails(SqlDataReader reader)
+        {
+            EmployeeModel model = new EmployeeModel();
+            //Read data SqlDataReader and store 
+
+            model.empId = Convert.ToInt32(reader["empId"]);
+            model.name = reader["name"].ToString();
+            model.BasicPay = Convert.ToDouble(reader["BasicPay"]);
+            model.startDate = reader.GetDateTime(3);
+            model.emailId = reader["emailId"].ToString();
+            model.Gender = reader["Gender"].ToString();
+            model.Department = reader["Department"].ToString();
+            model.PhoneNumber = Convert.ToDouble(reader["PhoneNumber"]);
+            model.Address = reader["Address"].ToString();
+            model.Deductions = Convert.ToDouble(reader["Deductions"]);
+            model.TaxablePay = Convert.ToDouble(reader["TaxablePay"]);
+            model.IncomeTax = Convert.ToDouble(reader["IncomeTax"]);
+            model.NetPay = Convert.ToDouble(reader["NetPay"]);
+            Console.WriteLine("{0} {1} {2}  {3} {4} {5}  {6}  {7} {8} {9} {10} {11} {12}", model.empId, model.name, model.BasicPay, model.startDate, model.emailId, model.Gender, model.Department, model.PhoneNumber, model.Address, model.Deductions, model.TaxablePay, model.IncomeTax, model.NetPay);
+            Console.WriteLine("\n");
+
+        }
     }
 }

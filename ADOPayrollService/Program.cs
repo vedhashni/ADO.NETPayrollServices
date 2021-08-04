@@ -27,6 +27,11 @@ namespace ADOPayrollService
                     repository.UpdateSalary(model);
                     repository.GetAllEmployee();
                     break;
+
+                case 3:
+                    EmployeeRepository repository1 = new EmployeeRepository();
+                    repository1.RetrieveDataBasedOnDateRange();
+                    break;
             }
         }
     }
