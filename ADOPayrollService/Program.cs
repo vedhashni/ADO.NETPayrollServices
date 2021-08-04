@@ -15,7 +15,19 @@ namespace ADOPayrollService
             //Creating a object for employeerepository
             EmployeeRepository repository = new EmployeeRepository();
             //Calling the method
-            repository.GetAllEmployee();
+            EmployeeModel model = new EmployeeModel();
+
+            int option = Convert.ToInt32(Console.ReadLine());
+            switch (option)
+            {
+                case 1:
+                    repository.GetAllEmployee();
+                    break;
+                case 2:
+                    repository.UpdateSalary(model);
+                    repository.GetAllEmployee();
+                    break;
+            }
         }
     }
 }

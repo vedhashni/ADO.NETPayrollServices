@@ -35,7 +35,7 @@ namespace ADOPayrollService
 
                         employeeModel.empId = Convert.ToInt32(reader["empId"]);
                         employeeModel.name = reader["name"].ToString();
-                        employeeModel.BasicPay = Convert.ToDouble(reader["BasicPay"]);
+                        employeeModel.BasicPay = Convert.ToDouble(reader["Basic Pay"]);
                         employeeModel.startDate = reader.GetDateTime(3);
                         employeeModel.emailId = reader["emailId"].ToString();
                         employeeModel.Gender = reader["Gender"].ToString();
@@ -65,6 +65,40 @@ namespace ADOPayrollService
             {
                 this.sqlconnection.Close();
             }
+        }
+
+        /// <summary>
+        /// UC3-Update the salary data using query for particular data
+        /// </summary>
+        /// <param name="model"></param>
+        public void UpdateSalary(EmployeeModel model)
+        {
+            try
+            {
+                sqlconnection.Open();
+                string query = @"update employee_payroll set Basic Pay = 3000000 where name='Karthick'";
+                SqlCommand command = new SqlCommand(query, sqlconnection);
+
+                int result = command.ExecuteNonQuery();
+                if (result != 0)
+                {
+                    Console.WriteLine("Salary Updated Successfully ");
+                }
+                else
+                {
+                    Console.WriteLine("Unsuccessfull");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                sqlconnection.Close();
+
+            }
+
         }
     }
 }
