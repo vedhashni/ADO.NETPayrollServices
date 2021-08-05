@@ -37,6 +37,24 @@ namespace ADOPayrollService
                     EmployeeRepository repository2 = new EmployeeRepository();
                     repository2.PerformAggregateFunctions("F");
                     break;
+
+                case 7:
+                    ERRepository eRRepository = new ERRepository();
+                    eRRepository.RetrieveAllData();
+                    break;
+                case 8:
+                    ERRepository eRRepository1 = new ERRepository();
+                    eRRepository1.UpdateSalaryQuery();
+                    break;
+                case 9:
+                    ERRepository eRRepository2 = new ERRepository();
+                    eRRepository2.DataBasedOnDateRange();
+                    break;
+                case 10:
+                    ERRepository eRRepository3 = new ERRepository();
+
+                    eRRepository3.PerformAggregateFunctions("F");
+                    break;
             }
         }
     }

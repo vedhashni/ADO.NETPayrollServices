@@ -9,6 +9,7 @@ namespace PayrollValidation
     {
         EmployeeRepository employeeRepository;
         EmployeeModel model;
+        
         [TestInitialize]
         public void SetUp()
         {
@@ -59,6 +60,54 @@ namespace PayrollValidation
             string Gender = "F";
             string actual = employeeRepository.PerformAggregateFunctions(Gender);
             Assert.AreEqual(actual, expected);
+        }
+
+        /// <summary>
+        /// Using ER Diagram Relationship -Retrieve the data using inner join
+        /// </summary>
+
+        [TestMethod]
+        public void TestMethodForRetrieveDataUsingInnerJoin()
+        {
+            ERRepository eRRepository = new ERRepository();
+            int expected = 4;
+            var actual = eRRepository.RetrieveAllData();
+            Assert.AreEqual(expected, actual);
+        }
+        /// <summary>
+        /// Update the basicpay column and returns the data
+        /// </summary>
+        [TestMethod]
+        public void TestMethodForUpdateQueryUsingErDiagramRelationShip()
+        {
+            ERRepository eRRepository = new ERRepository();
+            int expected = 1;
+            int actual = eRRepository.UpdateSalaryQuery();
+            Assert.AreEqual(actual, expected);
+        }
+        /// <summary>
+        /// Retruns the emploee details between date range
+        /// </summary>
+        [TestMethod]
+        public void TestMethodForDateRangeUsingERDiagramRelationShip()
+        {
+            ERRepository eRRepository = new ERRepository();
+            int expected = 2;
+            int actual = eRRepository.DataBasedOnDateRange();
+            Assert.AreEqual(expected, actual);
+        }
+        /// <summary>
+        /// Performing aggreagte functions(sum,count,ab=vg,min,max)
+        /// </summary>
+        [TestMethod]
+        public void TestMethodForPerformingAggregateFnUsingERDiagramRelationship()
+        {
+            ERRepository eRRepository = new ERRepository();
+
+            string expected = "F 3135000 60000 3000000 1045000";
+            string Gender = "F";
+            string actual = eRRepository.PerformAggregateFunctions(Gender);
+            Assert.AreEqual(expected, actual);
         }
     }
 }
