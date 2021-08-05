@@ -58,5 +58,39 @@ namespace ADOPayrollService
             }
             return flag;
         }
+
+        /// <summary>
+        /// Cascading Delete Operation
+        /// </summary>
+        /// <returns></returns>
+        public int DeleteUsingCasadeDelete()
+        {
+            int result = 0;
+            using (SqlConnection)
+            {
+                SqlConnection.Open();
+                //Begin SQL transaction
+                SqlTransaction sqlTransaction = SqlConnection.BeginTransaction();
+                SqlCommand sqlCommand = SqlConnection.CreateCommand();
+                sqlCommand.Transaction = sqlTransaction;
+                try
+                {
+                    //Delete the corresponding value which has employee id 4
+                    sqlCommand.CommandText = "Delete from Employee1 where EmployeeID='4'";
+                    sqlCommand.ExecuteNonQuery();
+                    result++;
+                    //Commit the transcation
+                    sqlTransaction.Commit();
+                    Console.WriteLine("Deleted Successfully!");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    //Rollback to the point before exception
+                    sqlTransaction.Rollback();
+                }
+            }
+            return result;
+        }
     }
 }

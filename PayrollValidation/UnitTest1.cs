@@ -123,5 +123,16 @@ namespace PayrollValidation
             int actual = transaction.InsertIntoTables();
             Assert.AreEqual(expected, actual);
         }
+
+        /// <summary>
+        /// Cascading Delete
+        /// </summary>
+        [TestMethod]
+        public void TestMethodForCascadingDelete()
+        {
+            int expected = 1;
+            int actual = transaction.DeleteUsingCasadeDelete();
+            Assert.AreEqual(expected, actual);
+        }
     }
 }
