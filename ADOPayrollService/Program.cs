@@ -55,6 +55,11 @@ namespace ADOPayrollService
 
                     eRRepository3.PerformAggregateFunctions("F");
                     break;
+
+                case 11:
+                    Transaction transaction = new Transaction();
+                    transaction.InsertIntoTables();
+                    break;
             }
         }
     }

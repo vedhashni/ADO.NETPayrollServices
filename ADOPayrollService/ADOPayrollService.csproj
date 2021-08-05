@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="EmployeeModel.cs" />
     <Compile Include="EmployeeRepository.cs" />
+    <Compile Include="ERRepository.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
