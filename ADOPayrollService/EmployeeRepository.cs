@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace ADOPayrollService
 {
@@ -18,14 +19,17 @@ namespace ADOPayrollService
         {
             try
             {
-                //Creating object for employeemodel and access the fields
-                EmployeeModel employeeModel = new EmployeeModel();
+                SqlConnection sqlconnection1 = new SqlConnection(connectionString);
+                using (sqlconnection1)
+                { 
+                    //Creating object for employeemodel and access the fields
+                 EmployeeModel employeeModel = new EmployeeModel();
                 //Retrieve query
                 string query = @"select * from employee_payroll";
-
+                this.sqlconnection.Open();
                 SqlCommand sqlCommand = new SqlCommand(query, sqlconnection);
                 //Open the connection
-                this.sqlconnection.Open();
+                //this.sqlconnection.Open();
                 //ExecuteReader: Returns data as rows.
                 SqlDataReader reader = sqlCommand.ExecuteReader();
                 if (reader.HasRows)
@@ -35,7 +39,7 @@ namespace ADOPayrollService
 
                         employeeModel.empId = Convert.ToInt32(reader["empId"]);
                         employeeModel.name = reader["name"].ToString();
-                        employeeModel.BasicPay = Convert.ToDouble(reader["Basic Pay"]);
+                        employeeModel.BasicPay = Convert.ToDouble(reader["BasicPay"]);
                         employeeModel.startDate = reader.GetDateTime(3);
                         employeeModel.emailId = reader["emailId"].ToString();
                         employeeModel.Gender = reader["Gender"].ToString();
@@ -50,12 +54,14 @@ namespace ADOPayrollService
                         Console.WriteLine("\n");
                     }
 
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("No data found");
+                    }
+                    reader.Close();
                 }
-                else
-                {
-                    Console.WriteLine("No data found");
-                }
-                reader.Close();
             }
             catch (Exception ex)
             {
@@ -71,12 +77,12 @@ namespace ADOPayrollService
         /// UC3-Update the salary data using query for particular data
         /// </summary>
         /// <param name="model"></param>
-        public void UpdateSalary(EmployeeModel model)
+        public int UpdateSalary(EmployeeModel model)
         {
             try
             {
                 sqlconnection.Open();
-                string query = @"update employee_payroll set Basic Pay = 3000000 where name='Karthick'";
+                string query = @"update employee_payroll set BasicPay=3000000 where name='Radhika'";
                 SqlCommand command = new SqlCommand(query, sqlconnection);
 
                 int result = command.ExecuteNonQuery();
@@ -88,10 +94,12 @@ namespace ADOPayrollService
                 {
                     Console.WriteLine("Unsuccessfull");
                 }
+                return result;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return default;
             }
             finally
             {
@@ -100,6 +108,53 @@ namespace ADOPayrollService
             }
 
         }
+
+        /// <summary>
+        /// UC4-Update the query using stored procedure
+        /// </summary>
+        /// <returns></returns>
+
+        public int UpdateSalaryUsingStoredProcedure(EmployeeModel model)
+        {
+            int result;
+            try
+            {
+                using (this.sqlconnection)
+                {
+                    //EmployeeModel displayModel = new EmployeeModel();
+                    SqlCommand command = new SqlCommand("dbo.UpdateEmployeeDetails", this.sqlconnection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("empId", model.empId);
+                    command.Parameters.AddWithValue("empName", model.name);
+                    command.Parameters.AddWithValue("BasicPay", model.BasicPay);
+                    sqlconnection.Open();
+                    result = command.ExecuteNonQuery();
+                    if (result != 0)
+                    {
+                        Console.WriteLine("Updated Successfully using stored procedure");
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not Updated!!!");
+                        return default;
+                    }
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return default;
+            }
+            finally
+            {
+                this.sqlconnection.Close();
+            }
+
+        }
+
 
         /// <summary>
         /// UC5-Retrieve employee details based on date range

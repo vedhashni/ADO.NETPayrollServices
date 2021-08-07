@@ -29,39 +29,48 @@ namespace ADOPayrollService
                     break;
 
                 case 3:
+                    model.empId = 1;
+                    model.name = "Ashok";
+                    model.BasicPay = 300000;
+                    repository.UpdateSalaryUsingStoredProcedure(model);
+                    EmployeeRepository repo = new EmployeeRepository();
+                    repo.GetAllEmployee();
+                    break;
+
+                case 4:
                     EmployeeRepository repository1 = new EmployeeRepository();
                     repository1.RetrieveDataBasedOnDateRange();
                     break;
 
-                case 4:
+                case 5:
                     EmployeeRepository repository2 = new EmployeeRepository();
                     repository2.PerformAggregateFunctions("F");
                     break;
 
-                case 7:
+                case 6:
                     ERRepository eRRepository = new ERRepository();
                     eRRepository.RetrieveAllData();
                     break;
-                case 8:
+                case 7:
                     ERRepository eRRepository1 = new ERRepository();
                     eRRepository1.UpdateSalaryQuery();
                     break;
-                case 9:
+                case 8:
                     ERRepository eRRepository2 = new ERRepository();
                     eRRepository2.DataBasedOnDateRange();
                     break;
-                case 10:
+                case 9:
                     ERRepository eRRepository3 = new ERRepository();
 
                     eRRepository3.PerformAggregateFunctions("F");
                     break;
 
-                case 11:
+                case 10:
                     Transaction transaction = new Transaction();
                     transaction.InsertIntoTables();
                     break;
 
-                case 12:
+                case 11:
                     Transaction transaction1 = new Transaction();
                     transaction1.MaintainListforAudit(1);
                     Transaction transaction2 = new Transaction();
