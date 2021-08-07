@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using ADOPayrollService;
+using System.Collections.Generic;
 
 
 namespace PayrollValidation
@@ -153,6 +154,15 @@ namespace PayrollValidation
             Transaction transaction = new Transaction();
             int actual = transaction.MaintainListforAudit(1);
             Assert.AreEqual(actual, expected);
+        }
+
+        [TestMethod]
+
+        public void TestMethodForWithoutUsingThread()
+        {
+            bool expected = true;
+            bool actual = transaction.ImplementingWithoutUsingThread();
+            Assert.AreEqual(expected, actual);
         }
     }
 }
