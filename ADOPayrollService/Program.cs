@@ -60,6 +60,13 @@ namespace ADOPayrollService
                     Transaction transaction = new Transaction();
                     transaction.InsertIntoTables();
                     break;
+
+                case 12:
+                    Transaction transaction1 = new Transaction();
+                    transaction1.MaintainListforAudit(1);
+                    Transaction transaction2 = new Transaction();
+                    transaction2.RetrieveAllData();
+                    break;
             }
         }
     }

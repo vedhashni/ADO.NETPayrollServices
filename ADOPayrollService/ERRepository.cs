@@ -145,11 +145,7 @@ namespace ADOPayrollService
             string result = null;
             try
             {
-                string query1 =
-@"select sum(BasicPay) as TotalSalary,min(BasicPay) as MinSalary,max(BasicPay) as MaxSalary,Round(avg(BasicPay),0) as AvgSalary,Gender,Count(*)  
-from Employee
-inner join PayRollCalculate on Employee.EmployeeID=PayRollCalculate.Employee_Id
-where Gender =" + "'" + Gender + "'" + " group by Gender";
+                string query1 =@"select sum(BasicPay) as TotalSalary,min(BasicPay) as MinSalary,max(BasicPay) as MaxSalary,Round(avg(BasicPay),0) as AvgSalary,Gender,Count(*) from Employee inner join PayRollCalculate on Employee.EmployeeID=PayRollCalculate.Employee_Id where Gender =" + "'" + Gender + "'" + " group by Gender";
 
                 SqlCommand sqlCommand = new SqlCommand(query1, this.sqlConnection);
                 //Sends params to procedure

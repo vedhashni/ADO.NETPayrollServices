@@ -92,5 +92,131 @@ namespace ADOPayrollService
             }
             return result;
         }
+
+        /// <summary>
+        /// Adding the IsActive column in employee1 table
+        /// </summary>
+        /// <returns></returns>
+        public string AddIsActiveColumn()
+        {
+            string result = null;
+            using (SqlConnection)
+            {
+                SqlConnection.Open();
+                //Begins SQL transaction
+                SqlTransaction sqlTransaction = SqlConnection.BeginTransaction();
+                SqlCommand sqlCommand = SqlConnection.CreateCommand();
+                sqlCommand.Transaction = sqlTransaction;
+                try
+                {
+                    //Add column IsActive in Employee1
+                    sqlCommand.CommandText = "Alter table Employee1 add IsActive int NOT NULL default 1";
+                    sqlCommand.ExecuteNonQuery();
+                    sqlTransaction.Commit();
+                    result = "IsActive Column Added";
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    //Rollback to the point before exception
+                    sqlTransaction.Rollback();
+                    result = "Column not Updated";
+                }
+            }
+            SqlConnection.Close();
+            return result;
+        }
+        public int MaintainListforAudit(int IDValue)
+        {
+            int res = 0;
+            SqlConnection.Open();
+            using (SqlConnection)
+            {
+                //Begin sql transaction
+                SqlTransaction sqlTransaction = SqlConnection.BeginTransaction();
+                SqlCommand sqlCommand = SqlConnection.CreateCommand();
+                sqlCommand.Transaction = sqlTransaction;
+                try
+                {
+                    sqlCommand.CommandText = @"Update Employee1 set IsActive = 0 where EmployeeID = '" + IDValue + "'";
+                    sqlCommand.ExecuteNonQuery();
+                    res++;
+                    sqlTransaction.Commit();
+                    Console.WriteLine("Updated Successfully!");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    //Rollback to the last point
+                    sqlTransaction.Rollback();
+                }
+            }
+            SqlConnection.Close();
+            return res;
+        }
+        /// <summary>
+        ///Retrieve the data from table
+        /// </summary>
+        public void RetrieveAllData()
+        {
+            //Open Connection
+            SqlConnection.Open();
+
+            try
+            {
+                string query = @"Select CompanyID,CompanyName,EmployeeID,EmployeeName,EmployeeAddress,IsActive,EmployeePhoneNum,StartDate,Gender,BasicPay,TaxablePay,IncomeTax,NetPay,Deductions,DepartmentId,DepartName
+from Company inner join Employee1 on Company.CompanyID=Employee1.Company_Id and Employee1.IsActive=1
+inner join PayRollCalculate on PayRollCalculate.Employee_Id=Employee1.EmployeeId
+inner join EmployeeDept on EmployeeDept.Employee_Id=Employee1.EmployeeID
+inner join DepartmentTable on DepartmentTable.DepartmentId=EmployeeDept.Dept_Id";
+                SqlCommand sqlCommand = new SqlCommand(query, SqlConnection);
+                DisplayEmployeeDetails(sqlCommand);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            //Close Connection
+            SqlConnection.Close();
+        }
+        //Display the employee details
+        public void DisplayEmployeeDetails(SqlCommand sqlCommand)
+        {
+            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+            //Creating the list to add data
+            List<EmployeeModel> employeeList = new List<EmployeeModel>();
+
+            if (sqlDataReader.HasRows)
+            {
+                //Read each row
+                while (sqlDataReader.Read())
+                {
+                    //Creating object for employeemodel
+                    EmployeeModel model = new EmployeeModel();
+
+                    model.empId = Convert.ToInt32(sqlDataReader["EmployeeID"]);
+                    model.CompanyID = Convert.ToInt32(sqlDataReader["CompanyID"]);
+                    model.name = sqlDataReader["EmployeeName"].ToString();
+                    model.CompanyName = sqlDataReader["CompanyName"].ToString();
+                    model.BasicPay = Convert.ToDouble(sqlDataReader["BasicPay"]);
+                    model.Deductions = Convert.ToDouble(sqlDataReader["Deductions"]);
+                    model.IncomeTax = Convert.ToDouble(sqlDataReader["IncomeTax"]);
+                    model.TaxablePay = Convert.ToDouble(sqlDataReader["TaxablePay"]);
+                    model.NetPay = Convert.ToDouble(sqlDataReader["NetPay"]);
+                    model.Gender = Convert.ToString(sqlDataReader["Gender"]);
+                    model.PhoneNumber = Convert.ToInt64(sqlDataReader["EmployeePhoneNum"]);
+                    model.Department = sqlDataReader["DepartName"].ToString();
+                    model.Address = sqlDataReader["EmployeeAddress"].ToString();
+                    model.startDate = Convert.ToDateTime(sqlDataReader["StartDate"]);
+                    model.IsActive = Convert.ToInt32(sqlDataReader["IsActive"]);
+                    //Display Data
+                    Console.WriteLine("\nCompany ID: {0} \t Company Name: {1} \nEmployee ID: {2} \t Employee Name: {3} \nBasic Pay: {4} \t Deduction: {5} \t Income Tax: {6} \t Taxable Pay: {7} \t NetPay: {8} \nGender: {9} \t PhoneNumber: {10} \t Department: {11} \t Address: {12} \t Start Date: {13} \t IsActive: {14}", model.CompanyID, model.CompanyName, model.empId, model.name, model.BasicPay, model.Deductions, model.IncomeTax, model.TaxablePay, model.NetPay, model.Gender, model.PhoneNumber, model.Department, model.Address, model.startDate, model.IsActive);
+                    employeeList.Add(model);
+                }
+                //Close sqlDataReader Connection
+                sqlDataReader.Close();
+            }
+        }
     }
 }
