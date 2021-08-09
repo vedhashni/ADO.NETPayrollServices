@@ -170,23 +170,51 @@ namespace PayrollValidation
             Assert.AreEqual(actual, expected);
         }
 
+        /// <summary>
+        /// UC1-Calcualting the time without thread
+        /// </summary>
         [TestMethod]
 
         public void TestMethodForWithoutUsingThread()
         {
+            string query = null;
             bool expected = true;
-            bool actual = transaction.ImplementingWithoutUsingThread();
+            bool actual = transaction.ImplementingWithoutUsingThread(query);
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// UC1-Calcualting the time using thread
+        /// UC2-Calcualting the time using thread
         /// </summary>
         [TestMethod]
         public void TestMethodUsingThread()
         {
+            string query = null;
             bool expected = true;
-            bool actual = transaction.ImplementingUsingThread();
+            bool actual = transaction.ImplementingUsingThread(query);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// UC3-->Using Synchronization(lock)--without thread
+        /// </summary>
+        [TestMethod]
+        public void TestMethodForWithoutThreadUsingSynchronization()
+        {
+            string query = null;
+            bool expected = true;
+            bool actual = transaction.ImplementingWithoutUsingThread_Lock(query);
+            Assert.AreEqual(expected, actual);
+        }
+        /// <summary>
+        /// UC3-->Using Synchronization(lock)--Using thread
+        /// </summary>
+        [TestMethod]
+        public void TestMethod_For_With_Thread_Using_Synchronization()
+        {
+            string query = null;
+            bool expected = true;
+            bool actual = transaction.ImplementingWithUsingThread_Lock(query);
             Assert.AreEqual(expected, actual);
         }
     }

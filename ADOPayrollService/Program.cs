@@ -79,13 +79,21 @@ namespace ADOPayrollService
 
                 case 12:
                     Transaction transaction4 = new Transaction();
-                    transaction4.ImplementingWithoutUsingThread();
+                    string query1 = null;
+                    transaction4.ImplementingWithoutUsingThread(query1);
                     break;
 
                 case 13:
                     Transaction transaction3 = new Transaction();
 
-                    transaction3.ImplementingUsingThread();
+                    string query = null;
+                    transaction3.ImplementingUsingThread(query);
+                    break;
+
+                case 14:
+                    string query2 = null;
+                    Transaction transaction5 = new Transaction();
+                    transaction5.ImplementingWithoutUsingThread_Lock(query2);
                     break;
             }
         }
