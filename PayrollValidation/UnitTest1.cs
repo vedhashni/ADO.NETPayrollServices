@@ -178,5 +178,16 @@ namespace PayrollValidation
             bool actual = transaction.ImplementingWithoutUsingThread();
             Assert.AreEqual(expected, actual);
         }
+
+        /// <summary>
+        /// UC1-Calcualting the time using thread
+        /// </summary>
+        [TestMethod]
+        public void TestMethodUsingThread()
+        {
+            bool expected = true;
+            bool actual = transaction.ImplementingUsingThread();
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

@@ -181,7 +181,10 @@ inner join DepartmentTable on DepartmentTable.DepartmentId=EmployeeDept.Dept_Id"
             //Close Connection
             SqlConnection.Close();
         }
-
+        /// <summary>
+        /// UC1-Implementing without using thread
+        /// </summary>
+        /// <returns></returns>
         public bool ImplementingWithoutUsingThread()
         {
             try
@@ -204,6 +207,25 @@ inner join DepartmentTable on DepartmentTable.DepartmentId=EmployeeDept.Dept_Id"
                 return false;
             }
             return false;
+        }
+
+        /// <summary>
+        ///     UC2-Implementing using thread
+        /// </summary>
+        /// <returns></returns>
+        public bool ImplementingUsingThread()
+        {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            RetrieveAllData();
+            stopWatch.Stop();
+            Console.WriteLine("Duration With thread: {0}", stopWatch.ElapsedMilliseconds);
+            if (Convert.ToInt32(stopWatch.ElapsedMilliseconds) != 0)
+            {
+                return true;
+            }
+            return false;
+
         }
         //Display the employee details
         public void DisplayEmployeeDetails(SqlCommand sqlCommand)
@@ -235,10 +257,15 @@ inner join DepartmentTable on DepartmentTable.DepartmentId=EmployeeDept.Dept_Id"
                     model.Address = sqlDataReader["EmployeeAddress"].ToString();
                     model.startDate = Convert.ToDateTime(sqlDataReader["StartDate"]);
                     model.IsActive = Convert.ToInt32(sqlDataReader["IsActive"]);
-                    //Display Data
-                    Console.WriteLine("\nCompany ID: {0} \t Company Name: {1} \nEmployee ID: {2} \t Employee Name: {3} \nBasic Pay: {4} \t Deduction: {5} \t Income Tax: {6} \t Taxable Pay: {7} \t NetPay: {8} \nGender: {9} \t PhoneNumber: {10} \t Department: {11} \t Address: {12} \t Start Date: {13} \t IsActive: {14}", model.CompanyID, model.CompanyName, model.empId, model.name, model.BasicPay, model.Deductions, model.IncomeTax, model.TaxablePay, model.NetPay, model.Gender, model.PhoneNumber, model.Department, model.Address, model.startDate, model.IsActive);
-                    employeeList.Add(model);
-                }
+                    //Creating a task and start the thread exection
+                    Task task = new Task(() =>
+                    {
+                        Console.WriteLine("\nCompany ID: {0} \t Company Name: {1} \nEmployee ID: {2} \t Employee Name: {3} \nBasic Pay: {4} \t Deduction: {5} \t Income Tax: {6} \t Taxable Pay: {7} \t NetPay: {8} \nGender: {9} \t PhoneNumber: {10} \t Department: {11} \t Address: {12} \t Start Date: {13} \t IsActive: {14}", model.CompanyID, model.CompanyName, model.empId, model.name, model.BasicPay, model.Deductions, model.IncomeTax, model.TaxablePay, model.NetPay, model.Gender, model.PhoneNumber, model.Department, model.Address, model.startDate, model.IsActive);
+                        employeeList.Add(model);
+                    });
+                        task.Start();
+
+                    }
                 //Close sqlDataReader Connection
                 sqlDataReader.Close();
             }
